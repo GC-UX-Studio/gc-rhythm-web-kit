@@ -135,6 +135,51 @@ The export currently defines explicit responsive sets for `Mobile`, `Tablet`, an
 | `leading-7xl` | `leading-42` | `leading-42` | `leading-50` |  |
 | `leading-8xl` | `leading-50` | `leading-50` | `leading-64` |  |
 
+#### Responsive Typography Interpretation
+
+This is the important implementation detail that is easy to miss when reading the token files in isolation:
+
+- role tokens like `Display.size-*`, `Heading.size-*`, and `Title.size-*` do not include the word `responsive` in their names
+- instead, they point to shared scale aliases like `2xl` through `8xl`
+- those aliases are the responsive layer
+- the active `Responsive/Mobile`, `Responsive/Tablet`, or `Responsive/Desktop` set determines what those aliases resolve to at each breakpoint
+
+In practice, that means responsiveness is carried by the referenced alias, not by the role token name itself.
+
+Examples:
+
+- `Display.size-small -> 6xl`
+- `Display.size-base -> 7xl`
+- `Display.size-large -> 8xl`
+- `Heading.size-small -> 3xl`
+- `Heading.size-base -> 4xl`
+- `Heading.size-large -> 5xl`
+- `Title.size-large -> 2xl`
+
+Those aliases then ladder through the responsive token sets:
+
+- `2xl` resolves to `size-22` on mobile and tablet, then `size-24` on desktop
+- `6xl` resolves to `size-32` on mobile and tablet, then `size-36` on desktop
+- `8xl` resolves to `size-44` on mobile and tablet, then `size-58` on desktop
+
+This should be read with the same mental model Tailwind uses for responsive typography and layout:
+
+- unprefixed styling is the base or mobile default
+- larger breakpoints override that base value
+- you should think in terms of `base -> lg+ override`, not separate unrelated token stacks
+
+For Rhythm, that means:
+
+- mobile and tablet usually inherit the same base role size
+- desktop introduces the larger override through the `Responsive/Desktop` token set
+- the role token stays stable while the referenced alias changes by breakpoint
+
+Developer translation:
+
+- use the role token as the semantic entry point
+- let the referenced size alias resolve responsively
+- do not create separate ad hoc role names just to express breakpoint changes already encoded in the `Responsive/*` sets
+
 ### Typography Semantics
 
 #### Base Semantic Scale
