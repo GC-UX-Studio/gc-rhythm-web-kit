@@ -2,6 +2,14 @@
 
 This document is the implementation-facing reference for the current `Rhythm Web` token export. It is now aligned to `gc-tokens.zip` in the project root instead of older screenshot-based notes.
 
+## Sync Status
+
+- Last verified in repo: `2026-04-17`
+- Source export archive: `gc-tokens.zip`
+- Export timestamp inside archive: `2026-04-04 04:35`
+- Reference status: this markdown file reflects the April 4 export
+- Implementation status: [`styles/rhythm-web-tokens.css`](../styles/rhythm-web-tokens.css) still reflects an older token translation and should not be treated as the canonical source for current token names or values
+
 ## Source Of Truth
 
 - Token archive: `gc-tokens.zip`
@@ -29,11 +37,29 @@ This document is the implementation-facing reference for the current `Rhythm Web
 
 ## What Changed In This Sync
 
+- Re-verified the reference against the checked-in April 4 export on `2026-04-17`.
+- Added an explicit note that this document is newer than the generated CSS token file.
 - Token sections are now based on the exported JSON, not inferred screenshots.
 - Color semantics now reflect both `Light` and `Dark` modes.
 - Size tokens now include the missing `space-28`, `space-36`, `stroke-small`, and `stroke-base` entries.
 - Component token names now match the export, including `text-promotion`, `border-default`, and `text-action-*`.
 - Responsive guidance now reflects the exported `Mobile`, `Tablet`, and `Desktop` sets instead of the older `sm` through `2xl` framing.
+
+## Current Repo Drift
+
+The April 4 export and the checked-in CSS token file are not in the same state right now.
+
+| Area | Export / Reference | Current CSS File |
+| --- | --- | --- |
+| Link token naming | `text-link`, `text-link-hover` | `--gc-text-link-active`, `--gc-text-link-hover` |
+| Status token naming | `text-success`, `text-warning`, `text-danger` | `--gc-text-status-positive`, `--gc-text-status-neutral`, `--gc-text-status-error` |
+| Promotion token naming | `text-promotion` | `--gc-text-sale` |
+| Background token naming | `bg-subtle`, `bg-strong` | `--gc-bg-container`, `--gc-bg-product` |
+| Border token naming | `border-default`, `border-divider` | `--gc-border-container`, `--gc-border-divider` |
+| Responsive typography scale | Mobile / Tablet / Desktop aliases from export | Static `--gc-text-size-*` values from an older scale |
+| Spacing scale | Includes `space-28` and `space-36` | Omits both tokens |
+
+Treat this document and `gc-tokens.zip` as canonical until the CSS file is regenerated or manually brought forward.
 
 ## Token Naming Notes
 
@@ -441,6 +467,7 @@ Developer translation:
 - `Label`, `Body`, and `Title` support multiple weights.
 - `Heading` and `Display` are exported as bold-only roles.
 - Display sizing is split into `small`, `base`, and `large`, not ad hoc marketing sizes.
+- The responsive aliases in this document are source-backed; do not infer typography values from the current CSS file where those values disagree.
 
 ### Known Notes
 
@@ -448,6 +475,7 @@ Developer translation:
 - The export has no dedicated elevation token set yet.
 - The export has no separate theme file content beyond the `Light` and `Dark` token sets themselves.
 - `Button.text-action-disabled` currently points to `text-disabled` but exposes the same web variable string as hover in the export. Treat that as a source-backed quirk worth verifying before implementation changes.
+- `styles/rhythm-web-tokens.css` appears to predate this export and should be updated in a separate pass.
 
 ## Component Reference Still Useful From Figma
 
