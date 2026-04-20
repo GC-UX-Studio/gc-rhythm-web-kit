@@ -15,6 +15,7 @@ Starter kit for bringing experiment code, copy-paste implementations, and AI-gen
 - [`styles/rhythm-web-tokens.css`](./styles/rhythm-web-tokens.css): shared CSS custom properties for tokens
 - [`styles/rhythm-web-base.css`](./styles/rhythm-web-base.css): baseline styling helpers for non-React environments
 - [`prompts/agent-prompts.md`](./prompts/agent-prompts.md): starter prompts for codegen agents
+- [`playbooks/figma-node-to-code/`](./playbooks/figma-node-to-code/): static workflow playbook for inspecting Figma nodes and copying prompt snippets into Codex
 - [`snippets/`](./snippets): copy-paste UI patterns for low-governance implementation environments
 
 ## Operating Principles
