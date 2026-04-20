@@ -1,0 +1,110 @@
+:root {
+  /* Core neutrals */
+  --gc-color-gray-white: hsba(0, 0%, 100%, 1);
+  --gc-color-gray-50: hsba(0, 0%, 98%, 1);
+  --gc-color-gray-100: hsba(0, 0%, 96%, 1);
+  --gc-color-gray-200: hsba(0, 0%, 93%, 1);
+  --gc-color-gray-300: hsba(0, 0%, 87%, 1);
+  --gc-color-gray-400: hsba(0, 0%, 73%, 1);
+  --gc-color-gray-500: hsba(0, 0%, 40%, 1);
+  --gc-color-gray-600: hsba(0, 0%, 9%, 1);
+
+  /* Brand and status colors */
+  --gc-color-red-200: hsba(358, 88%, 93%, 1);
+  --gc-color-red-300: hsba(356, 100%, 79%, 1);
+  --gc-color-red-orange-300: hsba(10, 100%, 80%, 1);
+  --gc-color-orange-300: hsba(28, 100%, 95%, 1);
+  --gc-color-green-200: hsba(118, 79%, 53%, 1);
+  --gc-color-blue-200: hsba(214, 92%, 91%, 1);
+  --gc-color-blue-300: hsba(228, 83%, 71%, 1);
+
+  /* Semantic colors */
+  --gc-text-primary: var(--gc-color-gray-600);
+  --gc-text-secondary: var(--gc-color-gray-500);
+  --gc-text-disabled: var(--gc-color-gray-400);
+  --gc-text-link-active: var(--gc-color-blue-200);
+  --gc-text-link-hover: var(--gc-color-blue-300);
+  --gc-text-status-positive: var(--gc-color-green-200);
+  --gc-text-status-neutral: var(--gc-color-orange-300);
+  --gc-text-status-error: var(--gc-color-red-orange-300);
+  --gc-text-sale: var(--gc-color-red-200);
+  --gc-text-inverse: var(--gc-color-gray-white);
+  --gc-btn-text-enabled: var(--gc-color-red-200);
+  --gc-btn-text-hover: var(--gc-color-red-300);
+  --gc-bg-primary: var(--gc-color-gray-white);
+  --gc-bg-container: var(--gc-color-gray-50);
+  --gc-bg-product: var(--gc-color-gray-100);
+  --gc-bg-inverse: var(--gc-color-gray-600);
+  --gc-border-container: var(--gc-color-gray-300);
+  --gc-border-divider: var(--gc-color-gray-300);
+
+  /* Typography */
+  --gc-font-family-base: "Instrument Sans", sans-serif;
+  --gc-font-weight-regular: 400;
+  --gc-font-weight-medium: 500;
+  --gc-font-weight-bold: 700;
+  --gc-font-weight-black: 900;
+
+  --gc-text-size-xs: 12px;
+  --gc-text-size-sm: 14px;
+  --gc-text-size-base: 16px;
+  --gc-text-size-lg: 18px;
+  --gc-text-size-xl: 20px;
+  --gc-text-size-2xl: 22px;
+  --gc-text-size-3xl: 24px;
+  --gc-text-size-4xl: 26px;
+  --gc-text-size-5xl: 28px;
+  --gc-text-size-6xl: 32px;
+  --gc-text-size-7xl: 34px;
+  --gc-text-size-8xl: 36px;
+  --gc-text-size-9xl: 44px;
+  --gc-text-size-10xl: 58px;
+
+  --gc-leading-xs: 18px;
+  --gc-leading-sm: 20px;
+  --gc-leading-base: 22px;
+  --gc-leading-lg: 24px;
+  --gc-leading-xl: 26px;
+  --gc-leading-2xl: 28px;
+  --gc-leading-3xl: 30px;
+  --gc-leading-4xl: 32px;
+  --gc-leading-5xl: 34px;
+  --gc-leading-6xl: 38px;
+  --gc-leading-7xl: 40px;
+  --gc-leading-8xl: 42px;
+  --gc-leading-9xl: 40px;
+  --gc-leading-10xl: 42px;
+
+  /* Spacing */
+  --gc-space-0: 0;
+  --gc-space-2: 2px;
+  --gc-space-4: 4px;
+  --gc-space-8: 8px;
+  --gc-space-12: 12px;
+  --gc-space-16: 16px;
+  --gc-space-20: 20px;
+  --gc-space-24: 24px;
+  --gc-space-32: 32px;
+  --gc-space-40: 40px;
+  --gc-space-48: 48px;
+  --gc-space-56: 56px;
+  --gc-space-64: 64px;
+  --gc-space-72: 72px;
+  --gc-space-80: 80px;
+  --gc-space-96: 96px;
+  --gc-space-112: 112px;
+  --gc-gap-128: 128px;
+
+  /* Radius */
+  --gc-radius-2: 2px;
+  --gc-radius-4: 4px;
+  --gc-radius-6: 6px;
+  --gc-radius-full: 9999px;
+
+  /* Breakpoints */
+  --gc-breakpoint-sm: 375px;
+  --gc-breakpoint-md: 768px;
+  --gc-breakpoint-lg: 1024px;
+  --gc-breakpoint-xl: 1280px;
+  --gc-breakpoint-2xl: 1540px;
+}

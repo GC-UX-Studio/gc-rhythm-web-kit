@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Figma Node To Code Workflow</title>
+    <link rel="stylesheet" href="../styles/rhythm-web-base.css" />
+    <style>
+      :root {
+        --playbook-shell: linear-gradient(180deg, #faf9f7 0%, #f1efeb 100%);
+        --playbook-panel: rgba(255, 255, 255, 0.86);
+        --playbook-panel-border: rgba(22, 22, 22, 0.08);
+        --playbook-ink-soft: rgba(22, 22, 22, 0.7);
+        --playbook-code-bg: #1c1d24;
+        --playbook-code-border: rgba(255, 255, 255, 0.08);
+        --playbook-code-copy: rgba(255, 255, 255, 0.08);
+        --playbook-accent: #ed1c24;
+        --playbook-accent-soft: rgba(237, 28, 36, 0.08);
+        --playbook-chip-blue: #91bfed;
+        --playbook-shadow: 0 18px 44px rgba(22, 22, 22, 0.08);
+      }
+
+      body {
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at top left, rgba(19, 110, 231, 0.08), transparent 30%),
+          radial-gradient(circle at right 20%, rgba(237, 28, 36, 0.08), transparent 28%),
+          var(--playbook-shell);
+      }
+
+      .playbook-page {
+        width: min(1500px, calc(100% - 48px));
+        margin: 24px auto;
+        padding: 24px;
+        border: 1px solid var(--playbook-panel-border);
+        border-radius: 24px;
+        background: var(--playbook-panel);
+        box-shadow: var(--playbook-shadow);
+        backdrop-filter: blur(16px);
+      }
+
+      .playbook-header {
+        margin-bottom: 20px;
+      }
+
+      .header-chip {
+        display: inline-flex;
+        width: fit-content;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 16px;
+        border-radius: 999px;
+        background: var(--playbook-chip-blue);
+        color: #161616;
+        font-size: 14px;
+        font-weight: var(--gc-font-weight-bold);
+        line-height: 1;
+      }
+
+      .header-chip img {
+        display: block;
+        width: 20px;
+        height: 20px;
+      }
+
+      .playbook-subheading {
+        max-width: 760px;
+        margin: 12px 0 0;
+        color: var(--playbook-ink-soft);
+        font-size: var(--gc-text-size-sm);
+        line-height: var(--gc-leading-sm);
+      }
+
+      .playbook-layout {
+        display: block;
+      }
+
+      .section-chip img,
+      .prompt-chip img {
+        display: block;
+        width: 20px;
+        height: 20px;
+      }
+
+      .workspace {
+        display: grid;
+        gap: 26px;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 14px;
+      }
+
+      .section-header-group {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        position: relative;
+      }
+
+      .section-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.96);
+        box-shadow: inset 0 0 0 1px rgba(22, 22, 22, 0.08);
+        font-size: 14px;
+        font-weight: var(--gc-font-weight-bold);
+      }
+
+      .info-trigger {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        cursor: help;
+      }
+
+      .info-trigger img {
+        display: block;
+        width: 22px;
+        height: 22px;
+      }
+
+      .tooltip {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        display: none;
+        min-width: 170px;
+        max-width: 220px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        background: #1f1f1f;
+        color: #ffffff;
+        font-size: 12px;
+        line-height: 1.35;
+        box-shadow: 0 8px 18px rgba(22, 22, 22, 0.18);
+        z-index: 2;
+      }
+
+      .info-trigger:hover .tooltip,
+      .info-trigger:focus-visible .tooltip {
+        display: block;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .card {
+        display: grid;
+        gap: 12px;
+        min-height: 100%;
+        padding: 16px;
+        border: 1px solid var(--playbook-panel-border);
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.84);
+      }
+
+      .card--full {
+        grid-column: 1 / -1;
+      }
+
+      .card p {
+        margin: 0;
+        color: var(--playbook-ink-soft);
+        font-size: var(--gc-text-size-sm);
+      }
+
+      .snippet {
+        display: grid;
+        gap: 12px;
+        padding: 14px;
+        border: 1px solid var(--playbook-code-border);
+        border-radius: 16px;
+        background: var(--playbook-code-bg);
+        color: rgba(255, 255, 255, 0.96);
+      }
+
+      .snippet-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .snippet-title {
+        display: inline-flex;
+        align-items: center;
+        color: rgba(255, 255, 255, 0.96);
+        font-size: 15px;
+        font-weight: var(--gc-font-weight-bold);
+        line-height: 1.2;
+      }
+
+      .copy-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border: 0;
+        border-radius: 999px;
+        background: #ffffff;
+        color: #161616;
+        font: inherit;
+        font-size: 13px;
+        font-weight: var(--gc-font-weight-bold);
+        cursor: pointer;
+        transition: background 180ms ease, transform 180ms ease;
+      }
+
+      .copy-button:hover,
+      .copy-button:focus-visible {
+        background: rgba(255, 255, 255, 0.9);
+        transform: translateY(-1px);
+      }
+
+      .copy-button[data-copied="true"] {
+        background: #d8f0d7;
+      }
+
+      .copy-button img {
+        display: block;
+        width: 16px;
+        height: 16px;
+      }
+
+      pre {
+        margin: 0;
+        overflow: hidden;
+        white-space: pre-wrap;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        font-size: 13px;
+        line-height: 1.5;
+        max-height: 100px;
+      }
+
+      .snippet-code {
+        position: relative;
+      }
+
+      .snippet-code::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 44px;
+        background: linear-gradient(180deg, rgba(28, 29, 36, 0), rgba(28, 29, 36, 1));
+        pointer-events: none;
+      }
+
+      .card-notes {
+        margin: 0;
+        padding-left: 18px;
+        color: var(--playbook-ink-soft);
+        font-size: var(--gc-text-size-sm);
+      }
+
+      .card-notes li + li {
+        margin-top: 6px;
+      }
+
+      @media (max-width: 1180px) {
+        .grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 840px) {
+        .playbook-page {
+          width: min(100% - 24px, 100%);
+          padding: 16px;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .card--full {
+          grid-column: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="playbook-page">
+      <header class="playbook-header">
+        <div class="header-chip">
+          <img src="./icons/agent-prompts.svg" alt="" />
+          <span>Agent Prompts</span>
+        </div>
+        <p class="playbook-subheading">
+          Use this sequence to translate Figma into system-aligned code in stages. Start with mapping, validate the system fit, then generate code.
+          This keeps each level grounded in the nearest valid Rhythm pattern, avoids the drift that comes from generating everything at once from a higher-level parent node, and trims away non-implementation detail before code is written.
+        </p>
+      </header>
+
+      <div class="playbook-layout">
+        <section class="workspace">
+          <section>
+            <div class="section-header">
+              <div class="section-header-group">
+                <div class="section-chip">
+                  <img src="./icons/token-audit.svg" alt="" />
+                  <span>Tokens</span>
+                </div>
+                <button class="info-trigger" type="button" aria-label="What Tokens means">
+                  <img src="./icons/info.svg" alt="" />
+                  <span class="tooltip">Use this to resolve specific style properties (spacing, typography, color, radius) when the system-mapping isn't automatically recognized.</span>
+                </button>
+              </div>
+            </div>
+            <div class="grid">
+              <article class="card card--full">
+                <div class="snippet">
+                  <div class="snippet-toolbar">
+                    <div class="snippet-title">0. Token Audit</div>
+                    <button class="copy-button" data-copy-target="token-audit"><img src="./icons/prompt.svg" alt="" /><span>Copy Prompt</span></button>
+                  </div>
+                  <div class="snippet-code">
+                    <pre id="token-audit">Inspect this Figma node and identify only token-level mappings.
+
+Output only:
+- spacing tokens
+- typography tokens (role first, primitive only if needed)
+- color tokens (component token, then semantic token, then primitive only if required)
+- radius and stroke tokens if applicable
+- ambiguities
+- mismatches that do not map cleanly to documented tokens
+
+Do not infer components.
+Do not suggest variants.
+If a value does not map to a documented token, flag it as a mismatch instead of hardcoding or approximating it.
+Do not write code.</pre>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section>
+            <div class="section-header">
+              <div class="section-header-group">
+                <div class="section-chip">
+                  <img src="./icons/components.svg" alt="" />
+                  <span>Components</span>
+                </div>
+                <button class="info-trigger" type="button" aria-label="What Components means">
+                  <img src="./icons/info.svg" alt="" />
+                  <span class="tooltip">Identify the node as a specific library component (e.g., Primary Button). Confirms the prop-mapping before generating the implementation code.</span>
+                </button>
+              </div>
+            </div>
+            <div class="grid">
+              <article class="card">
+                <div class="snippet">
+                  <div class="snippet-toolbar">
+                    <div class="snippet-title">1. Component Map</div>
+                    <button class="copy-button" data-copy-target="component-map"><img src="./icons/prompt.svg" alt="" /><span>Copy Prompt</span></button>
+                  </div>
+                  <div class="snippet-code">
+                    <pre id="component-map">Inspect this Figma node and map it to the nearest valid Rhythm Web component.
+
+Decision rules:
+- classify first
+- prefer existing documented component variants
+- check whether the node represents a documented variant or visible state before treating it as a one-off component
+- do not invent a new variant
+- if the node does not cleanly map, report the nearest valid pattern and the mismatch
+- ignore incidental layer naming unless it is already semantic and useful
+
+Output only:
+- component name
+- variant
+- size
+- visible state
+- supported state
+- tokens used
+- Figma details to ignore
+- mismatches or ambiguity
+- confidence: high, medium, or low
+
+Do not write code.</pre>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="snippet">
+                  <div class="snippet-toolbar">
+                    <div class="snippet-title">2. Component Validate</div>
+                    <button class="copy-button" data-copy-target="component-validate"><img src="./icons/prompt.svg" alt="" /><span>Copy Prompt</span></button>
+                  </div>
+                  <div class="snippet-code">
+                    <pre id="component-validate">Validate this component mapping against Rhythm Web rules.
+
+Check:
+- component exists
+- variant exists
+- size exists
+- state is supported
+- tokens are system-backed
+- ignored Figma details are correctly excluded
+
+Output only:
+- approved or rejected
+- corrections if needed
+- remaining mismatch notes
+
+Do not write code.</pre>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="snippet">
+                  <div class="snippet-toolbar">
+                    <div class="snippet-title">3. Component Code</div>
+                    <button class="copy-button" data-copy-target="component-code"><img src="./icons/prompt.svg" alt="" /><span>Copy Prompt</span></button>
+                  </div>
+                  <div class="snippet-code">
+                    <pre id="component-code">Using the approved component mapping, generate code for this component.
+
+Requirements:
+- implement using Rhythm Web patterns and tokens
+- do not invent new variants, props, or styling
+- preserve supported interaction intent
+- ignore unsupported Figma details
+- match the target environment exactly: [repo-native code / HTML-CSS-JS / React / etc.]
+
+Output:
+- short mapping summary
+- final code
+- mismatch note if applicable</pre>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section>
+            <div class="section-header">
+              <div class="section-header-group">
+                <div class="section-chip">
+                  <img src="./icons/modules.svg" alt="" />
+                  <span>Modules</span>
+                </div>
+                <button class="info-trigger" type="button" aria-label="What Modules means">
+                  <img src="./icons/info.svg" alt="" />
+                  <span class="tooltip">Use this stage to compose approved components into larger blocks like cards, promo units, or product tiles.</span>
+                </button>
+              </div>
+            </div>
+            <div class="grid">
+              <article class="card">
+                <div class="snippet">
+                  <div class="snippet-toolbar">
+                    <div class="snippet-title">4. Module Map</div>
+                    <button class="copy-button" data-copy-target="module-map"><img src="./icons/prompt.svg" alt="" /><span>Copy Prompt</span></button>
+                  </div>
+                  <div class="snippet-code">
+                    <pre id="module-map">Inspect this parent Figma node and compose it using existing Rhythm components.
+
+Decision rules:
+- reuse previously approved component mappings
+- do not reinterpret components already defined
+- identify only composition and layout structure
+- interpret Figma auto layout as system-backed layout structure, not literal frame nesting
+- prune hidden or decorative implementation-irrelevant detail before reasoning about composition
+- if a child does not map cleanly, flag it instead of inventing
+
+Output only:
+- component composition list
+- layout structure (stack, row, grid, split, etc.)
+- spacing and layout tokens
+- responsive considerations
+- mismatches or ambiguity
+- confidence: high, medium, or low
+
+Do not write code.</pre>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="snippet">
+                  <div class="snippet-toolbar">
+                    <div class="snippet-title">5. Module Validate</div>
+                    <button class="copy-button" data-copy-target="module-validate"><img src="./icons/prompt.svg" alt="" /><span>Copy Prompt</span></button>
+                  </div>
+                  <div class="snippet-code">
+                    <pre id="module-validate">Validate this module composition against Rhythm Web rules.
+
+Check:
+- child components are reused consistently
+- spacing uses documented tokens
+- layout structure is system-consistent
+- responsive behavior does not redefine internal component behavior
+- no one-off composition patterns were introduced without need
+
+Output only:
+- approved or rejected
+- corrections if needed
+- remaining mismatch notes
+
+Do not write code.</pre>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="snippet">
+                  <div class="snippet-toolbar">
+                    <div class="snippet-title">6. Module Code</div>
+                    <button class="copy-button" data-copy-target="module-code"><img src="./icons/prompt.svg" alt="" /><span>Copy Prompt</span></button>
+                  </div>
+                  <div class="snippet-code">
+                    <pre id="module-code">Generate code for this module using the approved component composition.
+
+Requirements:
+- compose from existing components
+- use spacing and layout tokens only
+- avoid one-off layout values
+- keep structure portable
+- do not redefine internal component styling unless required by the target environment
+
+Output:
+- structure summary
+- final code
+- mismatch note</pre>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section>
+            <div class="section-header">
+              <div class="section-header-group">
+                <div class="section-chip">
+                  <img src="./icons/layout.svg" alt="" />
+                  <span>Layouts</span>
+                </div>
+                <button class="info-trigger" type="button" aria-label="What Layouts means">
+                  <img src="./icons/info.svg" alt="" />
+                  <span class="tooltip">Arrange approved modules into page structures or sections, focusing on orchestration and responsiveness without altering internal module logic.</span>
+                </button>
+              </div>
+            </div>
+            <div class="grid">
+              <article class="card">
+                <div class="snippet">
+                  <div class="snippet-toolbar">
+                    <div class="snippet-title">7. Layout Map</div>
+                    <button class="copy-button" data-copy-target="layout-map"><img src="./icons/prompt.svg" alt="" /><span>Copy Prompt</span></button>
+                  </div>
+                  <div class="snippet-code">
+                    <pre id="layout-map">Inspect this layout and define page or section structure only.
+
+Decision rules:
+- use approved modules as building blocks
+- do not redefine internal component or module behavior
+- focus only on module placement, spacing rhythm, and responsive structure
+- use approved responsive tokens and existing layout patterns instead of inventing new breakpoints
+- prune hidden or decorative implementation-irrelevant detail before defining structure
+
+Output only:
+- modules used
+- layout pattern
+- spacing system between modules
+- responsive considerations
+- mismatches or ambiguity
+- confidence: high, medium, or low
+
+Do not generate full code.</pre>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="snippet">
+                  <div class="snippet-toolbar">
+                    <div class="snippet-title">8. Layout Validate</div>
+                    <button class="copy-button" data-copy-target="layout-validate"><img src="./icons/prompt.svg" alt="" /><span>Copy Prompt</span></button>
+                  </div>
+                  <div class="snippet-code">
+                    <pre id="layout-validate">Validate this layout structure against Rhythm Web rules.
+
+Check:
+- module reuse is consistent
+- spacing between modules uses documented tokens
+- responsive structure is system-backed
+- no page-specific hacks or one-off layout concepts were introduced
+
+Output only:
+- approved or rejected
+- corrections if needed
+- remaining mismatch notes
+
+Do not write code.</pre>
+                  </div>
+                </div>
+              </article>
+
+              <article class="card">
+                <div class="snippet">
+                  <div class="snippet-toolbar">
+                    <div class="snippet-title">9. Layout Code</div>
+                    <button class="copy-button" data-copy-target="layout-code"><img src="./icons/prompt.svg" alt="" /><span>Copy Prompt</span></button>
+                  </div>
+                  <div class="snippet-code">
+                    <pre id="layout-code">Generate layout code using the approved modules and layout structure.
+
+Requirements:
+- do not redefine internal components or modules
+- focus on layout, spacing, and responsive structure only
+- use Rhythm spacing and responsive tokens
+- avoid page-specific hacks
+- keep the code portable for the target environment
+
+Output:
+- layout summary
+- final code
+- mismatch note</pre>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </section>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      const buttons = document.querySelectorAll("[data-copy-target]");
+
+      async function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.setAttribute("readonly", "");
+        textArea.style.position = "absolute";
+        textArea.style.left = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+      }
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", async () => {
+          const target = document.getElementById(button.dataset.copyTarget);
+          const label = button.querySelector("span");
+          const originalLabel = label ? label.textContent : "Copy Prompt";
+
+          try {
+            await copyText(target.textContent);
+            if (label) {
+              label.textContent = "Copied";
+            }
+            button.dataset.copied = "true";
+          } catch (error) {
+            if (label) {
+              label.textContent = "Copy Failed";
+            }
+            button.dataset.copied = "false";
+          }
+
+          window.setTimeout(() => {
+            if (label) {
+              label.textContent = originalLabel;
+            }
+            button.dataset.copied = "false";
+          }, 1400);
+        });
+      });
+    </script>
+  </body>
+</html>
