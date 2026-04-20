@@ -8,7 +8,7 @@ This document is the implementation-facing reference for the current `Rhythm Web
 - Source export archive: `gc-tokens.zip`
 - Export timestamp inside archive: `2026-04-04 04:35`
 - Reference status: this markdown file reflects the April 4 export
-- Implementation status: [`styles/rhythm-web-tokens.css`](../styles/rhythm-web-tokens.css) still reflects an older token translation and should not be treated as the canonical source for current token names or values
+- Implementation status: [`styles/rhythm-web-tokens.css`](./styles/rhythm-web-tokens.css) still reflects an older token translation and should not be treated as the canonical source for current token names or values
 
 ## Source Of Truth
 
@@ -620,7 +620,7 @@ Developer translation:
 - The export has no dedicated elevation token set yet.
 - The export has no separate theme file content beyond the `Light` and `Dark` token sets themselves.
 - `Button.text-action-disabled` currently points to `text-disabled` but exposes the same web variable string as hover in the export. Treat that as a source-backed quirk worth verifying before implementation changes.
-- `styles/rhythm-web-tokens.css` appears to predate this export and should be updated in a separate pass.
+- `styles/rhythm-web-tokens.css` in `implementation-kit/styles/` appears to predate this export and should be updated in a separate pass.
 
 ## Component Reference Still Useful From Figma
 

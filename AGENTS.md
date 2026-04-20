@@ -4,9 +4,9 @@ This repo is intended to help implementation agents produce `Rhythm Web`-aligned
 
 ## Primary References
 
-- Use [`docs/gc-design-system-reference.md`](./docs/gc-design-system-reference.md) as the design-system contract.
+- Use [`implementation-kit/gc-design-system-reference.md`](./implementation-kit/gc-design-system-reference.md) as the design-system contract.
 - Treat `gc-tokens.zip` as the source-backed token export.
-- Do not treat [`styles/rhythm-web-tokens.css`](./styles/rhythm-web-tokens.css) as canonical when it conflicts with the reference doc.
+- Do not treat [`implementation-kit/styles/rhythm-web-tokens.css`](./implementation-kit/styles/rhythm-web-tokens.css) as canonical when it conflicts with the reference doc.
 
 ## Required Working Style
 
