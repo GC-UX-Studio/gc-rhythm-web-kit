@@ -1,18 +1,16 @@
 # GC Rhythm Web Kit
 
-Toolkit for turning Figma and agent-assisted implementation into Rhythm Web-aligned output without drifting from the design system.
+Agent guidance, design tokens, and copy-paste snippets for implementing the GC Rhythm Web design system.
 
 ## What This Repo Is For
 
 - Give pseudo-developers and implementation partners a fast path to Rhythm Web-aligned output
-- Reduce design drift in low-governance environments like experiments, merchandising tools, and embedded surfaces
-- Host lightweight workflow tools that help teams move from Figma inspection to system-aligned code generation
+- Prioritize AI agent alignment in low-governance environments like experiments, merchandising tools, and embedded surfaces
+- Reduce design drift by centering implementation around the documented Rhythm system instead of one-off visual interpretation
 
-## Two Tracks
+## Implementation Kit
 
-### Implementation Kit
-
-The implementation kit is the system-facing part of the repo. It centers on the design-system reference and everything that helps people or agents produce compliant code.
+The implementation kit centers on the Rhythm design-system reference and the materials that help people or agents produce compliant implementation quickly.
 
 - [`implementation-kit/gc-design-system-reference.md`](./implementation-kit/gc-design-system-reference.md): source-backed design-system contract for Rhythm Web tokens, components, and implementation rules
 - [`implementation-kit/styles/`](./implementation-kit/styles/): shared CSS token and baseline style files
@@ -20,16 +18,9 @@ The implementation kit is the system-facing part of the repo. It centers on the 
 - [`implementation-kit/snippets/`](./implementation-kit/snippets/README.md): copy-paste UI patterns for low-governance implementation environments
 - [`AGENTS.md`](./AGENTS.md): repo-wide agent guidance for staying inside Rhythm constraints
 
-### Hosted Tools
+## Figma Node To Code
 
-The hosted-tools track contains workflow surfaces that help teams operate the implementation kit.
-
-- [`hosted-tools/figma-node-to-code/`](./hosted-tools/figma-node-to-code/index.html): source for the Figma node to code workflow playbook
-- [`.github/workflows/deploy-hosted-tools.yml`](./.github/workflows/deploy-hosted-tools.yml): GitHub Pages deployment workflow for hosted tools
-
-## GitHub Pages
-
-This repo deploys hosted tools to GitHub Pages from source using GitHub Actions. Treat `hosted-tools/` as the editable source for hosted workflow surfaces and `implementation-kit/` as the source of truth for shared system guidance and styles.
+[Hosted site](https://gc-ux-studio.github.io/gc-rhythm-web-kit/figma-node-to-code/)
 
 ## Operating Principles
 
