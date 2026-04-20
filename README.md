@@ -4,7 +4,7 @@ Agent guidance, design tokens, and copy-paste snippets for implementing the GC R
 
 ## What This Repo Is For
 
-- Give pseudo-developers and implementation partners a fast path to Rhythm Web-aligned output
+- Give implementation partners a fast path to Rhythm Web-aligned output
 - Prioritize AI agent alignment in low-governance environments like experiments, merchandising tools, and embedded surfaces
 - Reduce design drift by centering implementation around the documented Rhythm system instead of one-off visual interpretation
 
@@ -20,7 +20,7 @@ The implementation kit centers on the Rhythm design-system reference and the mat
 
 ## Figma Node To Code
 
-[Hosted site](https://gc-ux-studio.github.io/gc-rhythm-web-kit/figma-node-to-code/)
+<a href="https://gc-ux-studio.github.io/gc-rhythm-web-kit/figma-node-to-code/" target="_blank" rel="noopener noreferrer">Hosted site</a>
 
 ## Operating Principles
 
