@@ -1,0 +1,50 @@
+name: Deploy Hosted Tools
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/deploy-hosted-tools.yml"
+      - "hosted-tools/**"
+      - "implementation-kit/styles/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Prepare site
+        run: |
+          mkdir -p dist
+          cp hosted-tools/index.html dist/index.html
+          cp -R hosted-tools/figma-node-to-code dist/figma-node-to-code
+          mkdir -p dist/implementation-kit
+          cp -R implementation-kit/styles dist/implementation-kit/styles
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

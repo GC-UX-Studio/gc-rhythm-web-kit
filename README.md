@@ -25,12 +25,11 @@ The implementation kit is the system-facing part of the repo. It centers on the 
 The hosted-tools track contains workflow surfaces that help teams operate the implementation kit.
 
 - [`hosted-tools/figma-node-to-code/`](./hosted-tools/figma-node-to-code/index.html): source for the Figma node to code workflow playbook
-- [`docs/figma-node-to-code/`](./docs/figma-node-to-code/index.html): GitHub Pages-ready published copy of that playbook
-- [`docs/index.html`](./docs/index.html): redirect entry point for the published Pages site
+- [`.github/workflows/deploy-hosted-tools.yml`](./.github/workflows/deploy-hosted-tools.yml): GitHub Pages deployment workflow for hosted tools
 
 ## GitHub Pages
 
-This repo uses the `docs/` folder as the GitHub Pages output only. Treat `hosted-tools/` as the editable source for hosted workflow surfaces and `docs/` as the published static copy.
+This repo deploys hosted tools to GitHub Pages from source using GitHub Actions. Treat `hosted-tools/` as the editable source for hosted workflow surfaces and `implementation-kit/` as the source of truth for shared system guidance and styles.
 
 ## Operating Principles
 
