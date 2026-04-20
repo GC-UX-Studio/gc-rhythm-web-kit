@@ -10,6 +10,7 @@ Starter kit for bringing experiment code, copy-paste implementations, and AI-gen
 
 ## Repo Structure
 
+- [`AGENTS.md`](./AGENTS.md): repo-wide implementation guidance for coding agents working against Rhythm Web constraints
 - [`docs/gc-design-system-reference.md`](./docs/gc-design-system-reference.md): source-backed reference for tokens, style guidance, and components
 - [`styles/rhythm-web-tokens.css`](./styles/rhythm-web-tokens.css): shared CSS custom properties for tokens
 - [`styles/rhythm-web-base.css`](./styles/rhythm-web-base.css): baseline styling helpers for non-React environments
