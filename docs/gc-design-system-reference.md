@@ -4,7 +4,7 @@ This document is the implementation-facing reference for the current `Rhythm Web
 
 ## Sync Status
 
-- Last verified in repo: `2026-04-17`
+- Last verified in repo: `2026-04-20`
 - Source export archive: `gc-tokens.zip`
 - Export timestamp inside archive: `2026-04-04 04:35`
 - Reference status: this markdown file reflects the April 4 export
@@ -31,9 +31,152 @@ This document is the implementation-facing reference for the current `Rhythm Web
 
 - Treat `gc-tokens.zip` and the Figma file as the source of truth.
 - Prefer semantic tokens before primitive tokens.
+- Component tokens override semantic tokens when both apply.
 - Prefer component tokens before inventing one-off component values.
 - Do not rely on older names from prior docs when a different exported token name exists now.
 - If a value is shown here as a token reference, preserve that indirection in implementation when possible.
+
+## Implementation Decision Hierarchy
+
+When implementing UI in this repo:
+
+1. Use an existing component variant if one exists in Figma or code.
+2. Else compose from approved primitives and documented tokens.
+3. Else reuse an existing repo pattern.
+4. Else stop and report the mismatch.
+
+Never:
+
+- create new component variants
+- introduce new tokens
+- derive implementation values directly from raw Figma primitives when a system mapping exists
+- invent new APIs or props just to match a one-off design detail
+
+## Figma Interpretation Rules
+
+Figma expresses visual intent, not literal implementation structure.
+
+Do not implement literally:
+
+- arbitrary spacing values
+- raw hex values
+- frame nesting
+- layer naming
+- one-off shadows or radii
+
+Always map Figma output to:
+
+- component tokens first
+- semantic tokens second
+- approved primitives only when no higher-level token applies
+
+## Invention Policy
+
+The agent must not:
+
+- create new component variants
+- define new tokens
+- introduce new props or APIs to support one-off styling
+- create custom responsive role names that duplicate exported responsive aliases
+
+If no exact mapping exists:
+
+- use the closest valid system pattern
+- document the mismatch explicitly
+- do not invent a new system concept to close the gap
+
+## Required Implementation Process
+
+1. Identify the component type and nearest valid variant.
+2. Map visual properties to component tokens, semantic tokens, or approved primitives.
+3. Identify which Figma details should be ignored because they are not system-backed.
+4. Implement using the closest valid system-compliant pattern.
+5. Validate before finalizing.
+
+## Mismatch Handling
+
+If a design does not map cleanly:
+
+1. Select the nearest valid system pattern.
+2. Do not invent a new structure, token, variant, or API.
+3. Document the difference between the design and the system-backed implementation.
+4. Continue with the system-compliant implementation unless the mismatch blocks usability or correctness.
+
+## Validation Checklist
+
+Before finalizing implementation, confirm:
+
+- no hardcoded values are used where a documented token exists
+- component tokens are used before semantic tokens when both apply
+- semantic tokens are used before primitives when both apply
+- no new variants, tokens, or one-off APIs were introduced
+- typography uses role tokens and responsive aliases instead of hardcoded breakpoint-specific sizes
+- implementation follows existing repo patterns where available
+
+If any item fails, revise once before final output.
+
+## Anti-Patterns
+
+Do not:
+
+- recreate Figma structure literally
+- introduce slight variations of existing components
+- hardcode spacing or typography values when tokens exist
+- create single-use wrapper components just to preserve a one-off frame structure
+- derive tokens from raw values instead of mapping to an existing system token
+
+## Decision Examples
+
+### Example: Button From Figma
+
+Figma shows:
+
+- `18px` horizontal padding
+- a custom shadow
+
+Correct implementation:
+
+- use the nearest spacing token such as `space-16` or `space-20` based on the existing button pattern
+- ignore the shadow unless and until shadow tokens are exported
+
+Why:
+
+- spacing must align to the documented scale
+- elevation is not yet tokenized in the export
+
+### Example: Heading At Desktop
+
+Figma shows:
+
+- a larger desktop heading size
+- a smaller mobile heading size
+
+Correct implementation:
+
+- use the matching role token such as `Heading.size-base` or `Heading.size-large`
+- do not hardcode separate mobile and desktop font-size values
+
+Why:
+
+- responsive aliases already encode the breakpoint behavior
+- role tokens are the semantic entry point for implementation
+
+### Example: Card Surface
+
+Figma shows:
+
+- a card with a subtle background and rounded corners
+- a radius that looks visually close to `6px`
+
+Correct implementation:
+
+- use `bg-subtle` or the nearest documented surface token
+- use `radius-large` for the card unless the component reference shows a specific override
+
+Why:
+
+- cards are currently treated as compositions, not a fully tokenized component family
+- implementation should stay on the documented radius scale instead of copying visual approximation
 
 ## What Changed In This Sync
 
@@ -457,6 +600,7 @@ Developer translation:
 ### Token Discipline
 
 - Use semantic color tokens for UI work before reaching for primitive colors.
+- Use component tokens before semantic tokens when both apply to the same property.
 - Use the responsive token sets for typography shifts instead of inventing extra breakpoints.
 - Use `radius-base` for buttons and `radius-large` for cards or larger surfaces unless Figma shows a specific override.
 - Preserve the exported naming exactly in docs and code comments.
@@ -468,6 +612,7 @@ Developer translation:
 - `Heading` and `Display` are exported as bold-only roles.
 - Display sizing is split into `small`, `base`, and `large`, not ad hoc marketing sizes.
 - The responsive aliases in this document are source-backed; do not infer typography values from the current CSS file where those values disagree.
+- Do not hardcode breakpoint-specific font sizes; use role tokens and let responsive aliases resolve automatically.
 
 ### Known Notes
 
