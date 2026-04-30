@@ -26,13 +26,19 @@ This document is the implementation-facing reference for the current `Rhythm Web
   - `Typography/Mode 1`
   - `Size/Mode 1`
 - Figma file: [Rhythm Web - Styles](https://www.figma.com/design/y1urmpM4BinDTzrvnQkhyB/Rhythm-Web?node-id=3677-1944&t=UAGdfjIM21J8aOTb-1)
+- Figma component properties define component existence, variants, sizes, states, and icon options.
+- Token exports define reusable styling values such as color, typography, spacing, radius, stroke, and component tokens.
 
 ## How To Use This Doc
 
 - Treat `gc-tokens.zip` and the Figma file as the source of truth.
+- Use Figma component properties to validate component variants, sizes, states, and icon options.
+- Use the token export to validate reusable styling values.
 - Prefer semantic tokens before primitive tokens.
 - Component tokens override semantic tokens when both apply.
 - Prefer component tokens before inventing one-off component values.
+- Tokens do not have to define every valid component variant.
+- Do not require a component-specific token for an intentionally absent value. If a Figma component variant intentionally has no fill, no border, or no icon, map that to transparent, none, native HTML behavior, or markup structure instead of inventing a new token.
 - Do not rely on older names from prior docs when a different exported token name exists now.
 - If a value is shown here as a token reference, preserve that indirection in implementation when possible.
 
@@ -40,8 +46,8 @@ This document is the implementation-facing reference for the current `Rhythm Web
 
 When implementing UI in this repo:
 
-1. Use an existing component variant if one exists in Figma or code.
-2. Else compose from approved primitives and documented tokens.
+1. Use an existing component variant, size, state, or icon option when it exists as a Figma component property or in code.
+2. Else compose from approved primitives and documented tokens for reusable styling values.
 3. Else reuse an existing repo pattern.
 4. Else stop and report the mismatch.
 
@@ -66,6 +72,7 @@ Do not implement literally:
 
 Always map Figma output to:
 
+- component properties for variants, sizes, states, and icon options
 - component tokens first
 - semantic tokens second
 - approved primitives only when no higher-level token applies
@@ -87,11 +94,12 @@ If no exact mapping exists:
 
 ## Required Implementation Process
 
-1. Identify the component type and nearest valid variant.
-2. Map visual properties to component tokens, semantic tokens, or approved primitives.
-3. Identify which Figma details should be ignored because they are not system-backed.
-4. Implement using the closest valid system-compliant pattern.
-5. Validate before finalizing.
+1. Identify the component type and nearest valid variant, size, state, and icon option from Figma component properties or code.
+2. Map styling values to component tokens, semantic tokens, or approved primitives.
+3. Identify intentional absences such as no fill, no border, or no icon.
+4. Identify which Figma details should be ignored because they are not system-backed.
+5. Implement using the closest valid system-compliant pattern.
+6. Validate before finalizing.
 
 ## Mismatch Handling
 
@@ -106,9 +114,11 @@ If a design does not map cleanly:
 
 Before finalizing implementation, confirm:
 
+- components, variants, sizes, states, and icon options exist in Figma component properties or the code contract
 - no hardcoded values are used where a documented token exists
 - component tokens are used before semantic tokens when both apply
 - semantic tokens are used before primitives when both apply
+- intentionally absent fills, borders, or icons are represented as absence instead of invented tokens
 - no new variants, tokens, or one-off APIs were introduced
 - typography uses role tokens and responsive aliases instead of hardcoded breakpoint-specific sizes
 - implementation follows existing repo patterns where available

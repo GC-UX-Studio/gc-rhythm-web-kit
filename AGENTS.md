@@ -6,6 +6,8 @@ This repo is intended to help implementation agents produce `Rhythm Web`-aligned
 
 - Use [`implementation-kit/gc-design-system-reference.md`](./implementation-kit/gc-design-system-reference.md) as the design-system contract.
 - Treat `gc-tokens.zip` as the source-backed token export.
+- Treat Figma component properties as the source for component existence, variants, sizes, states, and icon options.
+- Treat token exports as the source for reusable styling values such as color, typography, spacing, radius, stroke, and component tokens.
 - Do not treat [`implementation-kit/styles/rhythm-web-tokens.css`](./implementation-kit/styles/rhythm-web-tokens.css) as canonical when it conflicts with the reference doc.
 
 ## Required Working Style
@@ -13,10 +15,12 @@ This repo is intended to help implementation agents produce `Rhythm Web`-aligned
 For UI implementation tasks:
 
 1. Classify the component or pattern before coding.
-2. Map the implementation to existing component tokens, semantic tokens, and approved primitives.
-3. Ignore non-system Figma details such as arbitrary spacing, raw hex values, or one-off shadows.
-4. Implement the closest valid system-backed pattern.
-5. Validate before finalizing.
+2. Map component choice, variants, sizes, states, and icon options to Figma component properties or the existing code contract.
+3. Map styling values to existing component tokens, semantic tokens, and approved primitives.
+4. Treat intentional absences such as no fill, no border, or no icon as transparent, none, native HTML behavior, or markup structure instead of inventing tokens.
+5. Ignore non-system Figma details such as arbitrary spacing, raw hex values, or one-off shadows.
+6. Implement the closest valid system-backed pattern.
+7. Validate before finalizing.
 
 ## Required Output Structure
 
@@ -35,6 +39,7 @@ For small requests, this structure can be compressed, but the same reasoning ord
 - Do not invent new component variants.
 - Do not introduce one-off props or APIs just to match a single mock.
 - Do not hardcode values where a documented token exists.
+- Do not require a component-specific token for an intentionally absent value.
 - Do not recreate Figma structure literally when a simpler system-backed implementation exists.
 
 ## When To Escalate

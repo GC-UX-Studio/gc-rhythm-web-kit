@@ -402,7 +402,7 @@
         </div>
         <p class="playbook-subheading" data-brand-copy>
           Use this sequence to translate Figma into system-aligned code in stages. Start with mapping, validate the system fit, then generate code.
-          This keeps each level grounded in the nearest valid Rhythm Web pattern, avoids the drift that comes from generating everything at once from a higher-level parent node, and trims away non-implementation detail before code is written.
+          This keeps each level grounded in the nearest valid Rhythm Web component properties, code contract, and token-backed styling values from gc-tokens.zip, avoids the drift that comes from generating everything at once from a higher-level parent node, and trims away non-implementation detail before code is written.
         </p>
       </header>
 
@@ -431,11 +431,15 @@
                   <div class="snippet-code">
                     <pre id="token-audit">Inspect this Figma node against Rhythm Web and identify only token-level mappings.
 
+Use the system token export (gc-tokens.zip) for reusable styling values such as color, typography, spacing, radius, stroke, and component tokens.
+Do not require a component-specific token for an intentionally absent value. If a Figma component variant intentionally has no fill, no border, or no icon, map that to transparent, none, native HTML behavior, or markup structure instead of inventing a new token.
+
 Output only:
 - spacing tokens
 - typography tokens (role first, primitive only if needed)
 - color tokens (component token, then semantic token, then primitive only if required)
 - radius and stroke tokens if applicable
+- intentional absences, such as no fill, no border, or no icon
 - ambiguities
 - mismatches that do not map cleanly to documented tokens
 
@@ -472,21 +476,28 @@ Do not write code.</pre>
                   <div class="snippet-code">
                     <pre id="component-map">Inspect this Figma node and map it to the nearest valid Rhythm Web component.
 
+Use Figma component properties and the existing code contract to determine component existence, variants, sizes, states, and icon options.
+Use the system token export (gc-tokens.zip) for reusable styling values such as color, typography, spacing, radius, stroke, and component tokens.
+Do not require a component-specific token for an intentionally absent value. If a Figma component variant intentionally has no fill, no border, or no icon, map that to transparent, none, native HTML behavior, or markup structure instead of inventing a new token.
+{{brandComponentCaveat}}
+
 Decision rules:
 - classify first
-- prefer existing documented component variants
-- check whether the node represents a documented variant or visible state before treating it as a one-off component
+- Use an existing component variant, size, state, or icon option when it exists as a Figma component property or in the existing code contract.
+- check whether the node represents a documented variant, icon option, or visible state before treating it as a one-off component
 - do not invent a new variant
 - if the node does not cleanly map, report the nearest valid pattern and the mismatch
 - ignore incidental layer naming unless it is already semantic and useful
 
 Output only:
 - component name
-- variant
-- size
-- visible state
-- supported state
-- tokens used
+- variant from Figma component properties
+- size from Figma component properties
+- visible state from Figma component properties
+- supported state in code
+- icon option, if present
+- tokens used for actual styling values
+- intentional absences, such as no fill or no icon
 - Figma details to ignore
 - mismatches or ambiguity
 - confidence: high, medium, or low
@@ -505,12 +516,18 @@ Do not write code.</pre>
                   <div class="snippet-code">
                     <pre id="component-validate">Validate this component mapping against Rhythm Web rules.
 
+Use Figma component properties and the existing code contract to validate component existence, variants, sizes, states, and icon options.
+Use the system token export (gc-tokens.zip) for reusable styling values such as color, typography, spacing, radius, stroke, and component tokens.
+Do not require a component-specific token for an intentionally absent value. If a Figma component variant intentionally has no fill, no border, or no icon, map that to transparent, none, native HTML behavior, or markup structure instead of inventing a new token.
+{{brandComponentCaveat}}
+
 Check:
-- component exists
-- variant exists
-- size exists
-- state is supported
-- tokens are system-backed
+- component exists in Figma component properties or the code contract
+- variant exists in Figma component properties or the code contract
+- size exists for that variant
+- state is supported for that variant
+- icon option is supported, if present
+- styling values are backed by the system token export, semantic tokens, component tokens, approved primitives, or intentional absence
 - ignored Figma details are correctly excluded
 
 Output only:
@@ -532,9 +549,15 @@ Do not write code.</pre>
                   <div class="snippet-code">
                     <pre id="component-code">Using the approved component mapping, generate code for this component.
 
+Use Figma component properties and the existing code contract to implement component existence, variants, sizes, states, and icon options.
+Use the system token export (gc-tokens.zip) for reusable styling values such as color, typography, spacing, radius, stroke, and component tokens.
+Do not require a component-specific token for an intentionally absent value. If a Figma component variant intentionally has no fill, no border, or no icon, map that to transparent, none, native HTML behavior, or markup structure instead of inventing a new token.
+{{brandComponentCaveat}}
+
 Requirements:
-- implement using Rhythm Web patterns and tokens
-- do not invent new variants, props, or styling
+- implement the component, variant, size, state, and icon options from Figma component properties
+- implement styling values from the system token export, semantic tokens, component tokens, approved primitives, or intentional absence
+- do not invent new variants, props, tokens, or styling
 - preserve supported interaction intent
 - ignore unsupported Figma details
 - match the target environment exactly: [repo-native code / HTML-CSS-JS / React / etc.]
@@ -572,9 +595,14 @@ Output:
                   <div class="snippet-code">
                     <pre id="module-map">Inspect this parent Figma node and compose it using existing Rhythm Web components.
 
+Use Figma component properties and the existing code contract for child component variants, sizes, states, and icon options.
+Use the system token export (gc-tokens.zip) for reusable styling values such as color, typography, spacing, radius, stroke, and component tokens.
+Do not require a component-specific token for an intentionally absent value. If a Figma component variant intentionally has no fill, no border, or no icon, map that to transparent, none, native HTML behavior, or markup structure instead of inventing a new token.
+
 Decision rules:
 - reuse previously approved component mappings
 - do not reinterpret components already defined
+- Use an existing component variant, size, state, or icon option when it exists as a Figma component property or in the existing code contract.
 - identify only composition and layout structure
 - interpret Figma auto layout as system-backed layout structure, not literal frame nesting
 - prune hidden or decorative implementation-irrelevant detail before reasoning about composition
@@ -583,8 +611,10 @@ Decision rules:
 Output only:
 - component composition list
 - layout structure (stack, row, grid, split, etc.)
-- spacing and layout tokens
+- spacing and layout tokens used for actual styling values
+- intentional absences, such as no fill or no icon
 - responsive considerations
+- Figma details to ignore
 - mismatches or ambiguity
 - confidence: high, medium, or low
 
@@ -602,9 +632,18 @@ Do not write code.</pre>
                   <div class="snippet-code">
                     <pre id="module-validate">Validate this module composition against Rhythm Web rules.
 
+Use Figma component properties and the existing code contract to validate child component variants, sizes, states, and icon options.
+Use the system token export (gc-tokens.zip) for reusable styling values such as color, typography, spacing, radius, stroke, and component tokens.
+Do not require a component-specific token for an intentionally absent value. If a Figma component variant intentionally has no fill, no border, or no icon, map that to transparent, none, native HTML behavior, or markup structure instead of inventing a new token.
+
 Check:
-- child components are reused consistently
-- spacing uses documented tokens
+- child components exist in Figma component properties or the code contract
+- child component variants exist in Figma component properties or the code contract
+- size exists for each variant
+- state is supported for each variant
+- icon option is supported, if present
+- styling values are backed by the system token export, semantic tokens, component tokens, approved primitives, or intentional absence
+- ignored Figma details are correctly excluded
 - layout structure is system-consistent
 - responsive behavior does not redefine internal component behavior
 - no one-off composition patterns were introduced without need
@@ -628,12 +667,19 @@ Do not write code.</pre>
                   <div class="snippet-code">
                     <pre id="module-code">Generate code for this module using the approved Rhythm Web component composition.
 
+Use Figma component properties and the existing code contract for child component variants, sizes, states, and icon options.
+Use the system token export (gc-tokens.zip) for reusable styling values such as color, typography, spacing, radius, stroke, and component tokens.
+Do not require a component-specific token for an intentionally absent value. If a Figma component variant intentionally has no fill, no border, or no icon, map that to transparent, none, native HTML behavior, or markup structure instead of inventing a new token.
+
 Requirements:
 - compose from existing components
-- use spacing and layout tokens only
-- avoid one-off layout values
+- implement component variants, sizes, states, and icon options from Figma component properties
+- implement styling values from the system token export, semantic tokens, component tokens, approved primitives, or intentional absence
+- do not invent new variants, props, tokens, or styling
 - keep structure portable
 - do not redefine internal component styling unless required by the target environment
+- preserve supported interaction intent
+- ignore unsupported Figma details
 
 Output:
 - structure summary
@@ -668,6 +714,10 @@ Output:
                   <div class="snippet-code">
                     <pre id="layout-map">Inspect this Rhythm Web layout and define page or section structure only.
 
+Use approved modules and Figma component properties for any exposed component variants, sizes, states, and icon options.
+Use the system token export (gc-tokens.zip) for reusable styling values such as color, typography, spacing, radius, stroke, and component tokens.
+Do not require a component-specific token for an intentionally absent value. If a Figma component variant intentionally has no fill, no border, or no icon, map that to transparent, none, native HTML behavior, or markup structure instead of inventing a new token.
+
 Decision rules:
 - use approved modules as building blocks
 - do not redefine internal component or module behavior
@@ -678,8 +728,10 @@ Decision rules:
 Output only:
 - modules used
 - layout pattern
-- spacing system between modules
+- spacing system between modules using actual styling tokens
 - responsive considerations
+- intentional absences, such as no fill or no icon
+- Figma details to ignore
 - mismatches or ambiguity
 - confidence: high, medium, or low
 
@@ -697,9 +749,18 @@ Do not generate full code.</pre>
                   <div class="snippet-code">
                     <pre id="layout-validate">Validate this layout structure against Rhythm Web rules.
 
+Use approved modules and Figma component properties to validate any exposed component variants, sizes, states, and icon options.
+Use the system token export (gc-tokens.zip) for reusable styling values such as color, typography, spacing, radius, stroke, and component tokens.
+Do not require a component-specific token for an intentionally absent value. If a Figma component variant intentionally has no fill, no border, or no icon, map that to transparent, none, native HTML behavior, or markup structure instead of inventing a new token.
+
 Check:
 - module reuse is consistent
-- spacing between modules uses documented tokens
+- exposed component variants exist in Figma component properties or the code contract
+- exposed sizes exist for those variants
+- exposed states are supported for those variants
+- exposed icon options are supported, if present
+- styling values are backed by the system token export, semantic tokens, component tokens, approved primitives, or intentional absence
+- ignored Figma details are correctly excluded
 - responsive structure is system-backed
 - no page-specific hacks or one-off layout concepts were introduced
 
@@ -722,12 +783,19 @@ Do not write code.</pre>
                   <div class="snippet-code">
                     <pre id="layout-code">Generate layout code using the approved modules and layout structure.
 
+Use approved modules and Figma component properties for any exposed component variants, sizes, states, and icon options.
+Use the system token export (gc-tokens.zip) for reusable styling values such as color, typography, spacing, radius, stroke, and component tokens.
+Do not require a component-specific token for an intentionally absent value. If a Figma component variant intentionally has no fill, no border, or no icon, map that to transparent, none, native HTML behavior, or markup structure instead of inventing a new token.
+
 Requirements:
 - do not redefine internal components or modules
 - focus on layout, spacing, and responsive structure only
-- use Rhythm Web spacing and responsive tokens
+- implement styling values from the system token export, semantic tokens, component tokens, approved primitives, or intentional absence
+- do not invent new variants, props, tokens, or styling
 - avoid page-specific hacks
 - keep the code portable for the target environment
+- preserve supported interaction intent
+- ignore unsupported Figma details
 
 Output:
 - layout summary
@@ -749,11 +817,15 @@ Output:
       const brandTerms = {
         gc: {
           full: "Rhythm Web",
-          short: "Rhythm"
+          short: "Rhythm",
+          tokenArchive: "gc-tokens.zip",
+          componentCaveat: ""
         },
         mf: {
           full: "Friendly Web",
-          short: "Friendly"
+          short: "Friendly",
+          tokenArchive: "mf-tokens.zip",
+          componentCaveat: "Brand-specific caveat:\n- MF Button Ghost note: when the Ghost button intentionally has no fill, border, or icon, preserve that absence as transparent, none, or no icon markup instead of inventing a token.\n"
         }
       };
 
@@ -782,6 +854,8 @@ Output:
 
         brandCopyNodes.forEach((node) => {
           node.textContent = node.dataset.brandTemplate
+            .replace(/\{\{brandComponentCaveat\}\}\n?/g, terms.componentCaveat)
+            .replace(/\bgc-tokens\.zip\b/g, terms.tokenArchive)
             .replace(/\bRhythm Web\b/g, terms.full)
             .replace(/\bRhythm\b/g, terms.short);
         });
