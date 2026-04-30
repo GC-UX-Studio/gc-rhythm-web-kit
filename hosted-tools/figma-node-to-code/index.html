@@ -40,7 +40,17 @@
       }
 
       .playbook-header {
+        display: grid;
+        gap: var(--gc-space-16);
         margin-bottom: 20px;
+      }
+
+      .playbook-header-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: var(--gc-space-16);
+        flex-wrap: wrap;
       }
 
       .header-chip {
@@ -65,10 +75,73 @@
 
       .playbook-subheading {
         max-width: 760px;
-        margin: 12px 0 0;
+        margin: 0;
         color: var(--playbook-ink-soft);
         font-size: var(--gc-text-size-sm);
         line-height: var(--gc-leading-sm);
+      }
+
+      .brand-control {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--gc-space-8);
+        padding: var(--gc-space-4);
+        border: 1px solid var(--playbook-panel-border);
+        border-radius: var(--gc-radius-full);
+        background: rgba(255, 255, 255, 0.72);
+      }
+
+      .brand-control-label {
+        padding: 0 var(--gc-space-8);
+        color: var(--playbook-ink-soft);
+        font-size: var(--gc-text-size-sm);
+        font-weight: var(--gc-font-weight-bold);
+        line-height: 1;
+      }
+
+      .brand-switch {
+        display: inline-flex;
+        gap: var(--gc-space-4);
+        border: 0;
+        padding: 0;
+        margin: 0;
+      }
+
+      .brand-option {
+        position: relative;
+        display: inline-flex;
+      }
+
+      .brand-option input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      .brand-option span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 48px;
+        min-height: 34px;
+        padding: var(--gc-space-8) var(--gc-space-12);
+        border-radius: var(--gc-radius-full);
+        color: #161616;
+        font-size: var(--gc-text-size-sm);
+        font-weight: var(--gc-font-weight-bold);
+        line-height: 1;
+        transition: background 180ms ease, color 180ms ease;
+      }
+
+      .brand-option input:checked + span {
+        background: #161616;
+        color: #ffffff;
+      }
+
+      .brand-option input:focus-visible + span {
+        outline: 2px solid var(--playbook-accent);
+        outline-offset: 2px;
       }
 
       .playbook-layout {
@@ -286,6 +359,15 @@
           padding: 16px;
         }
 
+        .playbook-header-top {
+          align-items: stretch;
+        }
+
+        .brand-control {
+          width: 100%;
+          justify-content: space-between;
+        }
+
         .grid {
           grid-template-columns: 1fr;
         }
@@ -299,13 +381,28 @@
   <body>
     <main class="playbook-page">
       <header class="playbook-header">
-        <div class="header-chip">
-          <img src="./icons/agent-prompts.svg" alt="" />
-          <span>Agent Prompts</span>
+        <div class="playbook-header-top">
+          <div class="header-chip">
+            <img src="./icons/agent-prompts.svg" alt="" />
+            <span>Agent Prompts</span>
+          </div>
+          <div class="brand-control">
+            <span class="brand-control-label">Brand</span>
+            <div class="brand-switch" role="radiogroup" aria-label="Brand prompt language">
+              <label class="brand-option">
+                <input type="radio" name="brand" value="gc" checked />
+                <span>GC</span>
+              </label>
+              <label class="brand-option">
+                <input type="radio" name="brand" value="mf" />
+                <span>MF</span>
+              </label>
+            </div>
+          </div>
         </div>
-        <p class="playbook-subheading">
+        <p class="playbook-subheading" data-brand-copy>
           Use this sequence to translate Figma into system-aligned code in stages. Start with mapping, validate the system fit, then generate code.
-          This keeps each level grounded in the nearest valid Rhythm pattern, avoids the drift that comes from generating everything at once from a higher-level parent node, and trims away non-implementation detail before code is written.
+          This keeps each level grounded in the nearest valid Rhythm Web pattern, avoids the drift that comes from generating everything at once from a higher-level parent node, and trims away non-implementation detail before code is written.
         </p>
       </header>
 
@@ -332,7 +429,7 @@
                     <button class="copy-button" data-copy-target="token-audit"><img src="./icons/prompt.svg" alt="" /><span>Copy Prompt</span></button>
                   </div>
                   <div class="snippet-code">
-                    <pre id="token-audit">Inspect this Figma node and identify only token-level mappings.
+                    <pre id="token-audit">Inspect this Figma node against Rhythm Web and identify only token-level mappings.
 
 Output only:
 - spacing tokens
@@ -473,7 +570,7 @@ Output:
                     <button class="copy-button" data-copy-target="module-map"><img src="./icons/prompt.svg" alt="" /><span>Copy Prompt</span></button>
                   </div>
                   <div class="snippet-code">
-                    <pre id="module-map">Inspect this parent Figma node and compose it using existing Rhythm components.
+                    <pre id="module-map">Inspect this parent Figma node and compose it using existing Rhythm Web components.
 
 Decision rules:
 - reuse previously approved component mappings
@@ -529,7 +626,7 @@ Do not write code.</pre>
                     <button class="copy-button" data-copy-target="module-code"><img src="./icons/prompt.svg" alt="" /><span>Copy Prompt</span></button>
                   </div>
                   <div class="snippet-code">
-                    <pre id="module-code">Generate code for this module using the approved component composition.
+                    <pre id="module-code">Generate code for this module using the approved Rhythm Web component composition.
 
 Requirements:
 - compose from existing components
@@ -569,7 +666,7 @@ Output:
                     <button class="copy-button" data-copy-target="layout-map"><img src="./icons/prompt.svg" alt="" /><span>Copy Prompt</span></button>
                   </div>
                   <div class="snippet-code">
-                    <pre id="layout-map">Inspect this layout and define page or section structure only.
+                    <pre id="layout-map">Inspect this Rhythm Web layout and define page or section structure only.
 
 Decision rules:
 - use approved modules as building blocks
@@ -628,7 +725,7 @@ Do not write code.</pre>
 Requirements:
 - do not redefine internal components or modules
 - focus on layout, spacing, and responsive structure only
-- use Rhythm spacing and responsive tokens
+- use Rhythm Web spacing and responsive tokens
 - avoid page-specific hacks
 - keep the code portable for the target environment
 
@@ -647,6 +744,51 @@ Output:
 
     <script>
       const buttons = document.querySelectorAll("[data-copy-target]");
+      const brandInputs = document.querySelectorAll('input[name="brand"]');
+      const brandCopyNodes = document.querySelectorAll("[data-brand-copy], pre");
+      const brandTerms = {
+        gc: {
+          full: "Rhythm Web",
+          short: "Rhythm"
+        },
+        mf: {
+          full: "Friendly Web",
+          short: "Friendly"
+        }
+      };
+
+      brandCopyNodes.forEach((node) => {
+        node.dataset.brandTemplate = node.textContent;
+      });
+
+      function getStoredBrand() {
+        try {
+          return window.localStorage.getItem("figma-node-to-code-brand");
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function storeBrand(brand) {
+        try {
+          window.localStorage.setItem("figma-node-to-code-brand", brand);
+        } catch (error) {
+          // The selected brand still works for the current session.
+        }
+      }
+
+      function applyBrand(brand) {
+        const terms = brandTerms[brand] || brandTerms.gc;
+
+        brandCopyNodes.forEach((node) => {
+          node.textContent = node.dataset.brandTemplate
+            .replace(/\bRhythm Web\b/g, terms.full)
+            .replace(/\bRhythm\b/g, terms.short);
+        });
+
+        document.documentElement.dataset.brand = brand;
+        storeBrand(brand);
+      }
 
       async function copyText(text) {
         if (navigator.clipboard && window.isSecureContext) {
@@ -692,6 +834,24 @@ Output:
           }, 1400);
         });
       });
+
+      brandInputs.forEach((input) => {
+        input.addEventListener("change", () => {
+          if (input.checked) {
+            applyBrand(input.value);
+          }
+        });
+      });
+
+      const storedBrand = getStoredBrand();
+      const initialBrand = brandTerms[storedBrand] ? storedBrand : "gc";
+      const initialInput = document.querySelector(`input[name="brand"][value="${initialBrand}"]`);
+
+      if (initialInput) {
+        initialInput.checked = true;
+      }
+
+      applyBrand(initialBrand);
     </script>
   </body>
 </html>
